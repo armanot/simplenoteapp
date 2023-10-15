@@ -19,3 +19,31 @@ noteForm.addEventListener('submit', (e) => {
     noteList.appendChild(noteItem);
     noteForm.reset();
 });
+
+// Function to fetch and display notes
+function fetchAndDisplayNotes() {
+    fetch('/notes')
+        .then((response) => response.json())
+        .then((data) => {
+            noteList.innerHTML = '';
+            data.forEach((note) => {
+                const noteItem = document.createElement('li');
+                noteItem.innerHTML = `<strong>${note.title}:</strong> ${note.content}`;
+                noteList.appendChild(noteItem);
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+// Initial fetch to display existing notes
+fetchAndDisplayNotes();
+
+// Add a submit event listener to refresh notes after adding one
+noteForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // ... (your existing code to add a new note)
+    // After adding a note, refresh the note list
+    fetchAndDisplayNotes();
+});
